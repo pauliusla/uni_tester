@@ -6,6 +6,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -16,6 +17,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize("view-users", Auth::user());
+
         return response([
             // "users" => User::with("courses")->latest()->paginate(10)
             "users" => User::paginate(10)
