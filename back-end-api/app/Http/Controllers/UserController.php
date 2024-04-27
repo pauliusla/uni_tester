@@ -18,7 +18,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $this->authorize("view-users", Auth::user());
 
@@ -59,7 +59,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RegisterRequest $request)
+    public function store(RegisterRequest $request): Response
     {
         $user = User::create([
             'first_name' => $request->first_name,
@@ -79,7 +79,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $user): Response
     {
         return response([
             // "user" => $user->with("courses")->paginate(10)
@@ -90,7 +90,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserRequest $request, User $user)
+    public function update(UserRequest $request, User $user): Response
     {
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
@@ -108,7 +108,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user): Response
     {
         $user->delete();
 
@@ -120,7 +120,7 @@ class UserController extends Controller
     /**
      * Method for setting other users as admin.
      */
-    public function setAdmin(User $user)
+    public function setAdmin(User $user): Response
     {
         $user->is_admin = true;
 
@@ -134,7 +134,7 @@ class UserController extends Controller
     /**
      * Updates password
      */
-    public function updateUserPassword(Request $request, User $user)
+    public function updateUserPassword(Request $request, User $user): Response
     {
         $validator = Validator::make($request->all(), [
             'old' => ['required', function ($attribute, $value, $fail) use ($user) {
