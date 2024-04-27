@@ -17,6 +17,8 @@ class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * 
+     * @return Response array
      */
     public function index(): Response
     {
@@ -58,6 +60,10 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @param RegisterRequest $request
+     * 
+     * @return Response array
      */
     public function store(RegisterRequest $request): Response
     {
@@ -78,6 +84,10 @@ class UserController extends Controller
 
     /**
      * Display the specified resource.
+     * 
+     * @param User $user
+     * 
+     * @return Response array
      */
     public function show(User $user): Response
     {
@@ -89,6 +99,11 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
+     * @param UserRequest $request
+     * @param User $user
+     * 
+     * @return Response array
      */
     public function update(UserRequest $request, User $user): Response
     {
@@ -107,6 +122,10 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * @param User $user
+     * 
+     * @return Response array
      */
     public function destroy(User $user): Response
     {
@@ -119,6 +138,10 @@ class UserController extends Controller
 
     /**
      * Method for setting other users as admin.
+     * 
+     * @param User $user
+     * 
+     * @return Response array
      */
     public function setAdmin(User $user): Response
     {
@@ -133,6 +156,11 @@ class UserController extends Controller
 
     /**
      * Updates password
+     * 
+     * @param Request $request
+     * @param User $user
+     * 
+     * @return Response array
      */
     public function updateUserPassword(Request $request, User $user): Response
     {
