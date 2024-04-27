@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -96,6 +98,8 @@ class UserController extends Controller
         $user->street_address = $request->street_address;
         $user->country = $request->country;
 
+        $user->save();
+
         return response([
             "user" => $user
         ]);
@@ -110,6 +114,48 @@ class UserController extends Controller
 
         return response([
             "status" => "success"
+        ]);
+    }
+
+    /**
+     * Method for setting other users as admin.
+     */
+    public function setAdmin(User $user)
+    {
+        $user->is_admin = true;
+
+        $user->save();
+
+        return response([
+            "user" => $user
+        ]);
+    }
+
+    /**
+     * Updates password
+     */
+    public function updateUserPassword(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'old' => ['required', function ($attribute, $value, $fail) use ($user) {
+                if (!Hash::check($value, $user->password)) {
+                    return $fail(__('The current password is incorrect.'));
+                }
+            }],
+            'password' => 'required|string|min:8|confirmed'
+
+        ]);
+
+        if ($validator->fails()) {
+            throw new HttpResponseException(response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'data' => $validator->errors()
+            ]));
+        }
+
+        return response([
+            "user" => $user
         ]);
     }
 }
