@@ -40,17 +40,15 @@ class UserController extends Controller
      */
     public function login(Request $request): Response
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $this->loginValidator($request);
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+            throw new HttpResponseException(response()->json([
+                'success' => false,
+                'message' => 'User by given credentials was not found'
+            ]));
         }
 
         // TODO: is this correct? Perhaps old token can be reused without needing to recreate
@@ -192,6 +190,23 @@ class UserController extends Controller
                 }
             }],
             'password' => 'required|string|min:8|confirmed'
+        ]);
+
+        $this->validateRequest($validator);
+    }
+
+    /**
+     * Validates login request
+     * 
+     * @param Request $request
+     * 
+     * @return void
+     */
+    private function loginValidator(Request $request): void
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
         $this->validateRequest($validator);
