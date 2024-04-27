@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use \Illuminate\Validation\Validator as IluminateValidator;
 
 class UserController extends Controller
 {
@@ -164,6 +165,26 @@ class UserController extends Controller
      */
     public function updateUserPassword(Request $request, User $user): Response
     {
+        $this->passwordChangeValidator($request, $user);
+
+        $user->password = Hash::make($request['password']);
+        $user->save();
+
+        return response([
+            "user" => $user
+        ]);
+    }
+
+    /**
+     * Validation method for changing passwords
+     * 
+     * @param Request $request
+     * @param User $user
+     * 
+     * @return void
+     */
+    private function passwordChangeValidator(Request $request, User $user): void
+    {
         $validator = Validator::make($request->all(), [
             'old' => ['required', function ($attribute, $value, $fail) use ($user) {
                 if (!Hash::check($value, $user->password)) {
@@ -171,9 +192,21 @@ class UserController extends Controller
                 }
             }],
             'password' => 'required|string|min:8|confirmed'
-
         ]);
 
+        $this->validateRequest($validator);
+    }
+
+    /**
+     * Validate the request and throw error in case of failure
+     * 
+     * @param IluminateValidator $validator
+     * 
+     * @return void
+     * @throws HttpResponseException
+     */
+    private function validateRequest(IluminateValidator $validator): void
+    {
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json([
                 'success' => false,
@@ -181,9 +214,5 @@ class UserController extends Controller
                 'data' => $validator->errors()
             ]));
         }
-
-        return response([
-            "user" => $user
-        ]);
     }
 }
