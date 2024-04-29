@@ -14,7 +14,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token, user }) {
-      session?.user?.id = token.userId;
       return session;
     },
   },
@@ -30,7 +29,7 @@ export const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        return true;
+        return { name: "Paulius" };
       },
     }),
   ],
