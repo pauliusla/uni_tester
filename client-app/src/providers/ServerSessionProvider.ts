@@ -1,6 +1,33 @@
-import { NextAuthOptions, getServerSession } from "next-auth";
+import {
+  DefaultSession,
+  NextAuthOptions,
+  Session,
+  getServerSession,
+} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DatabaseProvider from "@/providers/DatabaseProvider";
+import { JWT } from "next-auth/jwt";
+
+declare module "next-auth" {
+  interface User {
+    jwt: string;
+    isAdmin: boolean;
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    city: string;
+    country: string;
+    streetAddress: string;
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  interface Session extends DefaultSession {
+    user: User;
+    jwt: string;
+  }
+}
 
 export async function getServerSideSession() {
   return await getServerSession(authOptions);
@@ -71,24 +98,34 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    session: async ({ session, token }) => {
+    session: async ({
+      session,
+      token,
+    }: {
+      session: Session;
+      token: JWT;
+    }): Promise<Session | null> => {
       if (!session) {
         return null;
       }
 
-      session.user.id = token.id;
-      session.jwt = token.jwt;
-      session.user.firstName = token.firstName;
-      session.user.lastName = token.lastName;
-      session.user.email = token.email;
-      session.user.isAdmin = token.isAdmin;
-      session.user.city = token.city;
-      session.user.country = token.country;
-      session.user.streetAddress = token.streetAddress;
-      session.user.createdAt = token.createdAt;
-      session.user.updatedAt = token.updatedAt;
-
-      return session;
+      return {
+        ...session,
+        jwt: token.jwt,
+        user: {
+          ...session.user,
+          id: token.id,
+          firstName: token.firstName,
+          lastName: token.lastName,
+          email: token.email,
+          isAdmin: token.isAdmin,
+          city: token.city,
+          country: token.country,
+          streetAddress: token.streetAddress,
+          createdAt: token.createdAt,
+          updatedAt: token.updatedAt,
+        },
+      };
     },
   },
 };
