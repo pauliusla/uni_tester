@@ -1,4 +1,4 @@
-import { getServerSideSession } from "@/providers/ServerSessionProvider";
+import { getServerSideSession } from "@/common/session";
 
 export default async function Home() {
   const serverSession = await getServerSideSession();

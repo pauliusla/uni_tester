@@ -1,12 +1,6 @@
-import {
-  DefaultSession,
-  NextAuthOptions,
-  Session,
-  getServerSession,
-} from "next-auth";
+import { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DatabaseProvider from "@/providers/DatabaseProvider";
-import { JWT } from "next-auth/jwt";
 
 declare module "next-auth" {
   interface User {
@@ -27,10 +21,6 @@ declare module "next-auth" {
     user: User;
     jwt: string;
   }
-}
-
-export async function getServerSideSession() {
-  return await getServerSession(authOptions);
 }
 
 export const authOptions: NextAuthOptions = {
@@ -98,15 +88,16 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    session: async ({
-      session,
-      token,
-    }: {
-      session: Session;
-      token: JWT;
-    }): Promise<Session | null> => {
+    session: async ({ session, token }) => {
       if (!session) {
-        return null;
+        return {
+          user: {
+            name: null,
+            email: null,
+            image: null,
+          },
+          expires: "",
+        };
       }
 
       return {
