@@ -1,3 +1,3 @@
 export const beApiUrl = () => {
-  return process.env.NEXTAUTH_SECRET || "http://localhost:8000";
+  return process.env.BE_API_URL || "http://localhost:8000";
 };
