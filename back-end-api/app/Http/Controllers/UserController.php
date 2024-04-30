@@ -53,7 +53,20 @@ class UserController extends Controller
 
         // TODO: is this correct? Perhaps old token can be reused without needing to recreate
         return response([
-            'success' => $user->createToken('API Token')->plainTextToken
+            'success' => true,
+            'token' => $user->createToken('API Token')->plainTextToken,
+            'user' => [
+                'id' => $user->id,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'city' => $user->city,
+                'street_address' => $user->street_address,
+                'country' => $user->country,
+                'is_admin' => $user->is_admin,
+                'email' => $user->email,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+            ]
         ]);
     }
 

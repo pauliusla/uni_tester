@@ -1,7 +1,5 @@
-import Image from "next/image";
-import styles from "./page.module.css";
 import { Form } from "./_components/Form";
 
-export default function Home() {
+export default async function Home() {
   return <Form />;
 }

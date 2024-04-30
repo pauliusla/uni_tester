@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 export const Form = (): JSX.Element => {
@@ -14,10 +15,25 @@ export const Form = (): JSX.Element => {
     setEmail(value);
   };
 
-  const submitForm = (value: React.FormEvent<HTMLInputElement>): void => {
+  const submitForm = async (
+    value: React.FormEvent<HTMLInputElement>
+  ): Promise<boolean> => {
     value.preventDefault();
 
-    console.log("Form submitted");
+    console.log("Form submitted", {
+      email,
+      password,
+    });
+
+    const loginResponse = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    console.log({ loginResponse });
+
+    return false;
   };
 
   return (
