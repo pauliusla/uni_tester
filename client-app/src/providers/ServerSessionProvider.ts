@@ -17,20 +17,32 @@ export const authOptions: NextAuthOptions = {
         };
         const databaseProvider = new DatabaseProvider();
 
-        const { user, token } = await databaseProvider.signIn({
-          email,
-          password,
-        });
-        if (user) {
-          return {
-            id: +user.id,
-            name: `${user.first_name} ${user.last_name}`,
-            email: user.email,
-            jwt: token,
-          };
-        }
+        try {
+          const { user, token } = await databaseProvider.signIn({
+            email,
+            password,
+          });
 
-        throw new Error("Failure to authenticate");
+          if (user) {
+            return {
+              id: +user.id,
+              firstName: user.first_name,
+              lastName: user.last_name,
+              email: user.email,
+              isAdmin: Boolean(user.is_admin),
+              city: user.city,
+              country: user.country,
+              streetAddress: user.street_address,
+              createdAt: user.created_at,
+              updatedAt: user.updated_at,
+              jwt: token,
+            };
+          }
+
+          return null;
+        } catch (e) {
+          throw new Error("Failure to authenticate");
+        }
       },
     }),
   ],
@@ -46,9 +58,17 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = +user.id;
         token.jwt = user.jwt;
-        token.name = user.name;
         token.email = user.email;
+        token.isAdmin = user.isAdmin;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+        token.city = user.city;
+        token.country = user.country;
+        token.streetAddress = user.streetAddress;
+        token.createdAt = user.createdAt;
+        token.updatedAt = user.updatedAt;
       }
+
       return token;
     },
     session: async ({ session, token }) => {
@@ -58,8 +78,15 @@ export const authOptions: NextAuthOptions = {
 
       session.user.id = token.id;
       session.jwt = token.jwt;
-      session.user.name = token.name;
+      session.user.firstName = token.firstName;
+      session.user.lastName = token.lastName;
       session.user.email = token.email;
+      session.user.isAdmin = token.isAdmin;
+      session.user.city = token.city;
+      session.user.country = token.country;
+      session.user.streetAddress = token.streetAddress;
+      session.user.createdAt = token.createdAt;
+      session.user.updatedAt = token.updatedAt;
 
       return session;
     },
