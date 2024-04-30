@@ -1,3 +1,5 @@
+import { beApiUrl } from "@/config/envConfig";
+
 interface UserSuccess {
   success: boolean;
   token: string;
@@ -19,7 +21,7 @@ class DatabaseProvider {
   url: string;
 
   constructor() {
-    this.url = "http://localhost:8000/api/login";
+    this.url = beApiUrl();
   }
 
   /**
@@ -39,7 +41,7 @@ class DatabaseProvider {
     password: string;
   }): Promise<UserSuccess> {
     console.log({ email, password });
-    const request = await fetch(this.url, {
+    const request = await fetch(`${this.url}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
