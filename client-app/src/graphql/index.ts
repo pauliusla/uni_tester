@@ -4,18 +4,11 @@ import { ApolloServer } from "@apollo/server";
 import { NextRequest } from "next/server";
 import typeDefs from "./types";
 import resolvers from "./resolvers";
+import { createSchema } from "graphql-yoga";
 
-const server = new ApolloServer({
-  resolvers,
+export const yogaSchema = createSchema({
   typeDefs,
-});
-
-export const handler = startServerAndCreateNextHandler<NextRequest>(server, {
-  context: async (req, res) => ({
-    req,
-    res,
-    dataSources: {},
-  }),
+  resolvers,
 });
 
 export const client = new ApolloClient({

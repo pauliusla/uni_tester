@@ -1,8 +1,16 @@
-import { NextRequest } from "next/server";
-import { handler } from "@/graphql";
+import { yogaSchema } from "@/graphql";
+import { createSchema, createYoga } from "graphql-yoga";
 
-async function request(request: NextRequest) {
-  return handler(request);
-}
+const { handleRequest } = createYoga({
+  schema: yogaSchema,
 
-export { request as POST, request as GET };
+  graphqlEndpoint: "/api/graphql",
+
+  fetchAPI: { Response },
+});
+
+export {
+  handleRequest as GET,
+  handleRequest as POST,
+  handleRequest as OPTIONS,
+};
