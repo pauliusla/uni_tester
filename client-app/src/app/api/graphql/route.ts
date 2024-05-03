@@ -1,11 +1,9 @@
 import { yogaSchema } from "@/graphql";
-import { createSchema, createYoga } from "graphql-yoga";
+import { createYoga } from "graphql-yoga";
 
 const { handleRequest } = createYoga({
   schema: yogaSchema,
-
   graphqlEndpoint: "/api/graphql",
-
   fetchAPI: { Response },
 });
 
