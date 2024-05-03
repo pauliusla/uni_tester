@@ -2,10 +2,14 @@
 
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Loader } from "@/components/Loader";
 
 export const Form = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const setPasswordInput = (value: string): void => {
     setPassword(value);
@@ -20,10 +24,7 @@ export const Form = (): JSX.Element => {
   ): Promise<boolean> => {
     value.preventDefault();
 
-    console.log("Form submitted", {
-      email,
-      password,
-    });
+    setLoading(true);
 
     const loginResponse = await signIn("credentials", {
       email,
@@ -31,13 +32,18 @@ export const Form = (): JSX.Element => {
       redirect: false,
     });
 
-    console.log({ loginResponse });
+    if (loginResponse && !loginResponse.error && loginResponse.ok) {
+      router.replace("/");
+    }
+
+    setLoading(false);
 
     return false;
   };
 
   return (
     <form>
+      {loading && <Loader />}
       <input
         type="text"
         name="email"

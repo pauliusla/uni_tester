@@ -2,7 +2,7 @@ import Image from "next/image";
 import module from "./HeaderNav.module.scss";
 import { Expander } from "../Expander";
 
-export const HeaderNav = () => {
+export const HeaderNav = (): JSX.Element => {
   const authLinks = [
     { title: "Login", link: "/login" },
     { title: "Register", link: "/register" },
