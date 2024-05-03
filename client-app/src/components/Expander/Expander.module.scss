@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  :hover {
+    cursor: pointer;
+  }
+}
+
+.end {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.expandedContainer {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 1;
+  top: 4rem;
+  border: 1px solid black;
+  background-color: white;
+  max-height: 20vh;
+  height: auto;
+  width: 20vw;
+
+  overflow: auto;
+  border-radius: 1rem;
+
+  > a {
+    text-decoration: none;
+    color: black;
+    border-bottom: 0.1px solid gray;
+    padding: 1rem;
+  }
+
+  :last-child {
+    border-bottom: none;
+  }
+}
+
+.expandedContainerEnd {
+  right: 0.5rem;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}

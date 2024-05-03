@@ -1,7 +1,13 @@
 import Image from "next/image";
 import module from "./HeaderNav.module.scss";
+import { Expander } from "../Expander";
 
 export const HeaderNav = () => {
+  const authLinks = [
+    { title: "Login", link: "/login" },
+    { title: "Register", link: "/register" },
+  ];
+
   return (
     <nav className={module.container}>
       <a href="/">
@@ -15,6 +21,7 @@ export const HeaderNav = () => {
         />
       </a>
       <div>This is header navigation</div>
+      <Expander end={true} title="Auth options" expandedLinks={authLinks} />
     </nav>
   );
 };
