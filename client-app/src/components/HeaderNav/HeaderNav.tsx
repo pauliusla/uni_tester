@@ -18,6 +18,7 @@ export const HeaderNav = (): JSX.Element => {
           height={0}
           sizes="10vw"
           style={{ width: "10vw", height: "auto" }}
+          priority
         />
       </a>
       <div>This is header navigation</div>
