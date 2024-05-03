@@ -55,6 +55,10 @@ class DatabaseProvider {
 
     const response = await request.json();
 
+    if (response.message) {
+      throw new Error(response.message);
+    }
+
     return response;
   }
 }

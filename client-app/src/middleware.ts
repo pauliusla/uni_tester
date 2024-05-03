@@ -6,6 +6,5 @@ import type { NextRequest } from "next/server";
 export async function middleware(req: NextRequest) {
   const session = await getToken({ req });
 
-  // console.log("middleware", { session });
   return NextResponse.next();
 }
