@@ -37,8 +37,12 @@ export const Expander = ({
           end ? module.expandedContainerEnd : ""
         } ${!isExpanded ? module.hidden : ""}`}
       >
-        {expandedLinks.map((link) => {
-          return <a href={link.link}>{link.title}</a>;
+        {expandedLinks.map((link, key) => {
+          return (
+            <a key={key} href={link.link}>
+              {link.title}
+            </a>
+          );
         })}
       </div>
     </div>
